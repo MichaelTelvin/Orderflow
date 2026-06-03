@@ -1,0 +1,109 @@
+# OrderFlow
+
+OrderFlow is a distributed commerce processing platform built to demonstrate production-grade backend engineering concepts commonly used in modern SaaS and e-commerce systems.
+
+The project focuses on reliability, observability, and operational tooling rather than storefront functionality.
+
+## Tech Stack
+
+### Backend
+- Node.js
+- TypeScript
+- Fastify
+- PostgreSQL
+- Redis
+- BullMQ
+
+### Frontend
+- React
+- TypeScript
+- Vite
+
+### Infrastructure
+- Docker
+- Docker Compose
+
+## Planned Features
+
+### Order Processing
+- Order lifecycle management
+- State transitions
+- Idempotent API operations
+- Optimistic locking
+
+### Reliability
+- Background job processing
+- Retry policies
+- Dead-letter queues
+- Rate limiting
+
+### Observability
+- Audit logs
+- Operational metrics
+- Real-time order tracking
+- Failure visibility
+
+### Administration
+- Order dashboard
+- Order details timeline
+- Retry controls
+- Queue monitoring
+
+## Architecture
+
+```text
+React UI
+    |
+    v
+Fastify API
+    |
+    +--> PostgreSQL
+    |
+    +--> Redis
+            |
+            v
+         BullMQ Workers
+```
+
+## Local Development
+
+Start all services:
+
+```bash
+docker compose up --build
+```
+
+Backend health check:
+
+```bash
+curl http://localhost:3000/health
+```
+
+Frontend:
+
+```text
+http://localhost:5173
+```
+
+## Project Structure
+
+```text
+orderflow/
+├── backend/
+├── frontend/
+├── docs/
+├── docker-compose.yml
+└── README.md
+```
+
+## Project Goals
+
+This project is intended as a portfolio application showcasing:
+
+- Backend architecture
+- Distributed systems concepts
+- TypeScript development
+- API design
+- Frontend integration
+- Dockerized environments
+- Production engineering practices
