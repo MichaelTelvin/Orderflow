@@ -1,4 +1,5 @@
 import Fastify from 'fastify'
+import cors from '@fastify/cors';
 import { orderRoutes } from './modules/orders/order.routes.js';
 
 
@@ -6,15 +7,19 @@ const fastify = Fastify({
     logger: true
 });
 
+await fastify.register(cors, {
+    origin: true,
+});
+
+fastify.register(orderRoutes, {
+    prefix: '/api/orders'
+});
+
 fastify.get('/health', async () => {
     return {
         status: 'ok',
         timestamp: new Date().toISOString(),
     };
-});
-
-fastify.register(orderRoutes, {
-    prefix: '/api/orders'
 });
 
 const start = async () => {
