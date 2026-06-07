@@ -1,15 +1,13 @@
-import type { OrderStatus } from '../../../generated/prisma/client.js';
+import * as z from 'zod';
+import type {
+    createOrderSchema,
+    createOrderItemSchema,
+    updateOrderStatusSchema
+} from './order.schemas.js';
 
-export interface CreateOrderRequest {
-    customerId: string;
-    items: CreateOrderItemRequest[];
-}
 
-export interface CreateOrderItemRequest {
-    sku: string;
-    quantity: number;
-}
+export type CreateOrderRequest = z.infer<typeof createOrderSchema>;
 
-export interface UpdateOrderStatusRequest {
-    status: OrderStatus;
-}
+export type CreateOrderItemRequest = z.infer<typeof createOrderItemSchema>;
+
+export type UpdateOrderStatusRequest = z.infer<typeof updateOrderStatusSchema>;

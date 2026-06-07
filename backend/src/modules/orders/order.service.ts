@@ -28,6 +28,7 @@ export class OrderService {
         return prisma.order.create({
             data: {
                 customerId: request.customerId,
+
             },
         });
     }

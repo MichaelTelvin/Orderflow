@@ -1,0 +1,17 @@
+import * as z from 'zod';
+import { OrderStatus } from '../../../generated/prisma/enums.js';
+
+
+export const createOrderItemSchema = z.object({
+    sku: z.string().min(1),
+    quantity: z.number().int().positive().gte(1)
+});
+
+export const createOrderSchema = z.object({
+    customerId: z.string().min(3),
+    items: z.array(createOrderItemSchema).min(1)
+});
+
+export const updateOrderStatusSchema = z.object({
+    status: z.enum(OrderStatus)
+});
