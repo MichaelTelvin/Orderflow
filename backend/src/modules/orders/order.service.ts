@@ -1,5 +1,9 @@
 import { prisma } from '../../lib/prisma.js';
-import type { OrderStatus } from '../../../generated/prisma/client.js';
+import type {
+    CreateOrderRequest,
+    UpdateOrderStatusRequest
+} from './order.types.js';
+
 
 
 export class OrderService {
@@ -20,18 +24,18 @@ export class OrderService {
         });
     }
 
-    async createOrder(customerId: string) {
+    async createOrder(request: CreateOrderRequest) {
         return prisma.order.create({
             data: {
-                customerId,
+                customerId: request.customerId,
             },
         });
     }
 
-    async updateStatus(id: string, status: OrderStatus) {
+    async updateStatus(id: string, request: UpdateOrderStatusRequest) {
         return prisma.order.update({
             where: { id },
-            data: { status },
+            data: { status: request.status },
         });
     }
 }

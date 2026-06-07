@@ -18,7 +18,10 @@ export async function orderRoutes(fastify: FastifyInstance) {
             customerId: string;
         };
 
-        const order = await orderService.createOrder(customerId);
+        const order = await orderService.createOrder({
+            customerId,
+            items: []
+        });
 
         return reply.code(201).send(order);
     });
@@ -30,6 +33,6 @@ export async function orderRoutes(fastify: FastifyInstance) {
             status: OrderStatus;
         };
 
-        return orderService.updateStatus(id, status);
+        return orderService.updateStatus(id, { status });
     });
 }

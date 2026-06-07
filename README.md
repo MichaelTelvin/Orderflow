@@ -10,6 +10,7 @@ The project focuses on reliability, observability, and operational tooling rathe
 - Node.js
 - TypeScript
 - Fastify
+- Prisma
 - PostgreSQL
 - Redis
 - BullMQ
@@ -57,9 +58,9 @@ React UI
     v
 Fastify API
     |
-    +--> PostgreSQL
-    |
-    +--> Redis
+    Prisma --> PostgreSQL
+            |
+             --> Redis
             |
             v
          BullMQ Workers
