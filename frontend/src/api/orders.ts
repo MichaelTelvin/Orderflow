@@ -24,6 +24,7 @@ const listOrders = async () => {
 
     } catch (error) {
         console.error('Fetch failed:', error);
+        throw error;
     }
 };
 

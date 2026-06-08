@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent, type SubmitEvent } from 'react';
 import { createOrder } from '../api/orders.js';
+import styles from '../assets/css/CreateOrderForm.module.css';
 
 type OrderItemForm = {
     sku: string;
@@ -27,19 +28,21 @@ export const CreateOrderForm = () => {
 
     const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const response = await createOrder(form);
-        console.log(response)
+        await createOrder(form);
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
-                name="customerId"
-                value={form.customerId}
-                onChange={handleChange}
-            />
-            <button type="submit">Submit</button>
+        <form className={styles.formContainer} onSubmit={handleSubmit}>
+            <div className={styles.formGroup}>
+                <label className={styles.label} htmlFor="email">Customer ID</label>
+                <input
+                    className={styles.input}
+                    name="customerId"
+                    value={form.customerId}
+                    onChange={handleChange}
+                />
+            </div>
+            <button className={styles.submitButton} type="submit">Submit</button>
         </form>
     )
-
 }

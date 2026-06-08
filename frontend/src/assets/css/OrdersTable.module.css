@@ -1,0 +1,26 @@
+.tableWrapper {
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.ordersTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.ordersTable thead tr {
+    border-bottom: 2px solid #ccc;
+}
+
+.ordersTable thead th {
+    padding: 10px;
+}
+
+.ordersTable tbody tr {
+    border-bottom: 1px solid #eee;
+}
+
+.ordersTable tbody td {
+    padding: 10px;
+}
