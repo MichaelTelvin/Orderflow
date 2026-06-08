@@ -1,44 +1,13 @@
 import styles from '../assets/css/OrdersTable.module.css';
-import { listOrders } from '../api/orders.js';
-import { useState, useEffect } from 'react';
+import type { Order } from '../types/orders';
 
-export const OrdersTable = () => {
+type OrdersTableProps = {
+    orders: Order[];
+    loading: boolean;
+    error: string | null;
+};
 
-    type Order = {
-        id: string;
-        customerId: string;
-        status: string;
-        createdAt: string;
-        updatedAt: string;
-        items: [];
-    };
-
-    const [orders, setOrders] = useState<Order[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                setLoading(true);
-                setError(null);
-
-                const orders = await listOrders();
-
-                if (!orders) {
-                    throw new Error('Failed to fetch orders');
-                }
-
-                setOrders(orders);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Unknown error');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchOrders();
-    }, []);
+export const OrdersTable = ({ orders, loading, error }: OrdersTableProps) => {
 
     const formatDate = (date: string) =>
         new Intl.DateTimeFormat('en-US', {

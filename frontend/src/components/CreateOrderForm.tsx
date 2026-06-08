@@ -12,11 +12,18 @@ type OrderForm = {
     items: OrderItemForm[]
 };
 
-export const CreateOrderForm = () => {
-    const [form, setForm] = useState<OrderForm>({
+type OrderProps = {
+    onOrderCreated: () => void;
+};
+
+export const CreateOrderForm = ({ onOrderCreated }: OrderProps) => {
+
+    const initialState = {
         customerId: '',
         items: [{ sku: "TEST-SKU", quantity: 1 }]
-    });
+    };
+
+    const [form, setForm] = useState<OrderForm>(initialState);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -28,7 +35,11 @@ export const CreateOrderForm = () => {
 
     const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
+
         await createOrder(form);
+        onOrderCreated();
+
+        setForm(initialState);
     }
 
     return (
