@@ -7,8 +7,9 @@ const fastify = Fastify({
     logger: true
 });
 
-await fastify.register(cors, {
-    origin: true,
+fastify.register(cors, {
+    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
 });
 
 fastify.register(orderRoutes, {

@@ -50,4 +50,26 @@ const createOrder = async (payload: OrderRequest) => {
     }
 };
 
-export { listOrders, createOrder };
+const updateOrderStatus = async (orderId: string, status: string) => {
+    try {
+        const response = await fetch(`${ORDERS_URL}/${orderId}/status`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': 'Bearer AUTH_TOKEN'
+            },
+            body: JSON.stringify({ status })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        return response;
+
+    } catch (error) {
+        console.error('Order status update failed:', error);
+    }
+};
+
+export { listOrders, createOrder, updateOrderStatus };

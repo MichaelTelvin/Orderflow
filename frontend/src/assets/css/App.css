@@ -1,7 +1,7 @@
 #center {
   display: flex;
   flex-direction: column;
-  margin-top: 6rem;
+  margin-top: 4rem;
   place-content: top;
   place-items: center;
   flex-grow: 0.2;

@@ -5,9 +5,10 @@ type OrdersTableProps = {
     orders: Order[];
     loading: boolean;
     error: string | null;
+    onOrderStatusChanged: (orderId: string, status: string) => void;
 };
 
-export const OrdersTable = ({ orders, loading, error }: OrdersTableProps) => {
+export const OrdersTable = ({ orders, loading, error, onOrderStatusChanged }: OrdersTableProps) => {
 
     const formatDate = (date: string) =>
         new Intl.DateTimeFormat('en-US', {
@@ -43,7 +44,14 @@ export const OrdersTable = ({ orders, loading, error }: OrdersTableProps) => {
                                 {order.id.slice(0, 8)}...
                             </td>
                             <td>{order.customerId}</td>
-                            <td>{order.status}</td>
+                            <td>
+                                <select value={order.status} onChange={(e) => onOrderStatusChanged(order.id, e.target.value)}>
+                                    <option value="CREATED">CREATED</option>
+                                    <option value="PROCESSING">PROCESSING</option>
+                                    <option value="COMPLETED">COMPLETED</option>
+                                    <option value="FAILED">FAILED</option>
+                                </select>
+                            </td>
                             <td>{formatDate(order.createdAt)}</td>
                             <td>{formatDate(order.updatedAt)}</td>
                             <td>{order.items.length}</td>
