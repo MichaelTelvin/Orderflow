@@ -25,3 +25,20 @@ CREATE TABLE "OrderItem" (
 
 -- AddForeignKey
 ALTER TABLE "OrderItem" ADD CONSTRAINT "OrderItem_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "Order"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- CreateEnum
+CREATE TYPE "OrderEventType" AS ENUM ('ORDER_CREATED', 'STATUS_CHANGED', 'PROCESSING_STARTED', 'PROCESSING_FAILED', 'RETRY_REQUESTED', 'ORDER_COMPLETED');
+
+-- CreateTable
+CREATE TABLE "OrderEvent" (
+    "id" TEXT NOT NULL,
+    "orderId" TEXT NOT NULL,
+    "type" "OrderEventType" NOT NULL,
+    "message" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "OrderEvent_pkey" PRIMARY KEY ("id")
+);
+
+-- AddForeignKey
+ALTER TABLE "OrderEvent" ADD CONSTRAINT "OrderEvent_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "Order"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -8,26 +8,40 @@ datasource db {
 }
 
 model Order {
-    id         String      @id @default(cuid())
-    customerId String
-    status     OrderStatus @default(CREATED)
-
-    items OrderItem[]
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id          String       @id @default(cuid())
+    customerId  String
+    status      OrderStatus  @default(CREATED)
+    items       OrderItem[]
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+    orderEvents OrderEvent[]
 }
 
 model OrderItem {
-    id String @id @default(cuid())
-
-    orderId String
-    order   Order  @relation(fields: [orderId], references: [id])
-
-    sku      String
-    quantity Int
-
+    id        String   @id @default(cuid())
+    orderId   String
+    order     Order    @relation(fields: [orderId], references: [id])
+    sku       String
+    quantity  Int
     createdAt DateTime @default(now())
+}
+
+model OrderEvent {
+    id        String         @id @default(cuid())
+    orderId   String
+    order     Order          @relation(fields: [orderId], references: [id])
+    type      OrderEventType
+    message   String
+    createdAt DateTime       @default(now())
+}
+
+enum OrderEventType {
+    ORDER_CREATED
+    STATUS_CHANGED
+    PROCESSING_STARTED
+    PROCESSING_FAILED
+    RETRY_REQUESTED
+    ORDER_COMPLETED
 }
 
 enum OrderStatus {

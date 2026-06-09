@@ -30,6 +30,12 @@ export class OrderService {
                 items: {
                     create: request.items,
                 },
+                orderEvents: {
+                    create: {
+                        type: 'ORDER_CREATED',
+                        message: `Order created with ${request.items.length} items.`
+                    },
+                },
             },
         });
     }
@@ -37,7 +43,15 @@ export class OrderService {
     async updateStatus(id: string, request: UpdateOrderStatusRequest) {
         return prisma.order.update({
             where: { id },
-            data: { status: request.status },
+            data: {
+                status: request.status,
+                orderEvents: {
+                    create: {
+                        type: 'STATUS_CHANGED',
+                        message: `Order status changed to ${request.status}.`
+                    },
+                },
+            },
         });
     }
 }

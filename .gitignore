@@ -19,6 +19,7 @@ build/
 out/
 .next/
 .output/
+backend/generated/
 
 # TypeScript
 *.tsbuildinfo
