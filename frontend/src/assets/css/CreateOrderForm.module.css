@@ -1,5 +1,7 @@
 .formContainer {
-    max-width: 400px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
     margin: 2rem auto;
     padding: 2rem;
     border-radius: 10px;
@@ -11,9 +13,13 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 1.5rem;
+    flex: 1 1 200px;
+    gap: 8px;
+    align-items: center;
 }
 
 .label {
+    display: flex;
     margin-bottom: 0.5rem;
     font-weight: 600;
     color: #888484;
@@ -34,7 +40,7 @@
 }
 
 .submitButton {
-    width: 100%;
+    width: 30%;
     padding: 0.75rem;
     background-color: #0070f3;
     color: white;

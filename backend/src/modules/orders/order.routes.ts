@@ -14,13 +14,14 @@ export async function orderRoutes(fastify: FastifyInstance) {
     });
 
     fastify.post('/', async (request, reply) => {
-        const { customerId } = request.body as {
+        const { customerId, items } = request.body as {
             customerId: string;
+            items: []
         };
 
         const order = await orderService.createOrder({
             customerId,
-            items: []
+            items
         });
 
         return reply.code(201).send(order);

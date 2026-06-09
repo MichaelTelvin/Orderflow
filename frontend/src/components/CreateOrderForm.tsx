@@ -4,7 +4,7 @@ import styles from '../assets/css/CreateOrderForm.module.css';
 
 type OrderItemForm = {
     sku: string;
-    quantity: number;
+    quantity: number | '';
 };
 
 type OrderForm = {
@@ -18,9 +18,9 @@ type OrderProps = {
 
 export const CreateOrderForm = ({ onOrderCreated }: OrderProps) => {
 
-    const initialState = {
+    const initialState: OrderForm = {
         customerId: '',
-        items: [{ sku: "TEST-SKU", quantity: 1 }]
+        items: [{ sku: '', quantity: '' }]
     };
 
     const [form, setForm] = useState<OrderForm>(initialState);
@@ -33,10 +33,30 @@ export const CreateOrderForm = ({ onOrderCreated }: OrderProps) => {
         }));
     };
 
+    const handleItemChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setForm(prev => ({
+            ...prev,
+            items: prev.items.map((item, index) =>
+                index === 0
+                    ? { ...item, [name]: value }
+                    : item
+            )
+        }));
+    };
+
     const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        await createOrder(form);
+        const payload = {
+            customerId: form.customerId,
+            items: form.items.map(item => ({
+                sku: item.sku,
+                quantity: Number(item.quantity),
+            })),
+        };
+
+        await createOrder(payload);
         onOrderCreated();
 
         setForm(initialState);
@@ -45,7 +65,7 @@ export const CreateOrderForm = ({ onOrderCreated }: OrderProps) => {
     return (
         <form className={styles.formContainer} onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
-                <label className={styles.label} htmlFor="email">Customer ID</label>
+                <label className={styles.label} htmlFor="customerId">Customer ID</label>
                 <input
                     className={styles.input}
                     name="customerId"
@@ -53,7 +73,29 @@ export const CreateOrderForm = ({ onOrderCreated }: OrderProps) => {
                     onChange={handleChange}
                 />
             </div>
-            <button className={styles.submitButton} type="submit">Submit</button>
+            <div className={styles.formGroup}>
+                <label className={styles.label} htmlFor="sku">SKU</label>
+                <input
+                    className={styles.input}
+                    name="sku"
+                    value={form.items[0].sku}
+                    onChange={handleItemChange}
+                />
+            </div>
+            <div className={styles.formGroup}>
+                <label className={styles.label} htmlFor="quantity">Quantity</label>
+                <input
+                    className={styles.input}
+                    name="quantity"
+                    type="number"
+                    value={form.items[0].quantity}
+                    onChange={handleItemChange}
+                />
+            </div>
+            <div className={styles.formGroup}>
+                <button className={styles.submitButton} type="submit">Submit</button>
+            </div>
+
         </form>
     )
 }

@@ -1,6 +1,7 @@
 .tableWrapper {
     padding: 20px;
     overflow-x: auto;
+    overflow-y: scroll;
 }
 
 .ordersTable {

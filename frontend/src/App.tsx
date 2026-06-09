@@ -37,14 +37,13 @@ function App() {
   return (
     <>
       <section id="center">
-        <div>
+        <div id="form-container">
           <CreateOrderForm
             onOrderCreated={loadOrders} />
         </div>
       </section>
-      <section id="spacer"></section>
       <section>
-        <div>
+        <div id="orders-container">
           <OrdersTable
             orders={orders}
             loading={loading}

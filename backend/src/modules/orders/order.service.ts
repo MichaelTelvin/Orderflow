@@ -5,7 +5,6 @@ import type {
 } from './order.types.js';
 
 
-
 export class OrderService {
     async listOrders() {
         return prisma.order.findMany({
@@ -28,7 +27,9 @@ export class OrderService {
         return prisma.order.create({
             data: {
                 customerId: request.customerId,
-
+                items: {
+                    create: request.items,
+                },
             },
         });
     }
