@@ -16,14 +16,16 @@ const ORDERS_URL = `${API_BASE_URL}/api/orders`;
 const listOrders = async () => {
     try {
         const response = await fetch(ORDERS_URL);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
         const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.message ?? `HTTP error! Status: ${response.status}`
+            );
+        }
         return data;
 
     } catch (error) {
-        console.error('Fetch failed:', error);
         throw error;
     }
 };
@@ -40,13 +42,15 @@ const createOrder = async (payload: OrderRequest) => {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            const errorBody = await response.json();
+            throw new Error(
+                errorBody.message ?? `HTTP error! Status: ${response.status}`
+            );
         }
-
         return response;
 
     } catch (error) {
-        console.error('Order creation failed:', error);
+        throw error;
     }
 };
 
@@ -62,13 +66,15 @@ const updateOrderStatus = async (orderId: string, status: string) => {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            const errorBody = await response.json();
+            throw new Error(
+                errorBody.message ?? `HTTP error! Status: ${response.status}`
+            );
         }
-
         return response;
 
     } catch (error) {
-        console.error('Order status update failed:', error);
+        throw error;
     }
 };
 

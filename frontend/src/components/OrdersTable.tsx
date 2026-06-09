@@ -45,7 +45,11 @@ export const OrdersTable = ({ orders, loading, error, onOrderStatusChanged }: Or
                             </td>
                             <td>{order.customerId}</td>
                             <td>
-                                <select value={order.status} onChange={(e) => onOrderStatusChanged(order.id, e.target.value)}>
+                                <select
+                                    className={styles.statusSelect}
+                                    value={order.status}
+                                    onChange={(e) => onOrderStatusChanged(order.id, e.target.value)}
+                                >
                                     <option value="CREATED">CREATED</option>
                                     <option value="PROCESSING">PROCESSING</option>
                                     <option value="COMPLETED">COMPLETED</option>

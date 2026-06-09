@@ -1,8 +1,27 @@
-import { prisma } from '../../lib/prisma.js';
+import type { OrderStatus } from '../../../generated/prisma/enums.js';
 import type {
     CreateOrderRequest,
     UpdateOrderStatusRequest
 } from './order.types.js';
+import { prisma } from '../../lib/prisma.js';
+import { InvalidStatusTransitionError } from '../../errors/InvalidStatusTransitionError.js';
+import { NotFoundError } from '../../errors/NotFoundError.js';
+
+
+const validateStatusTransition = (currentStatus: OrderStatus, newStatus: OrderStatus) => {
+    const validTransitions: Record<OrderStatus, OrderStatus[]> = {
+        CREATED: ['PROCESSING', 'FAILED'],
+        PROCESSING: ['COMPLETED', 'FAILED'],
+        COMPLETED: [],
+        FAILED: ['PROCESSING']
+    };
+
+    if (!validTransitions[currentStatus].includes(newStatus)) {
+        throw new InvalidStatusTransitionError(
+            `Invalid status transition from ${currentStatus} to ${newStatus}`
+        );
+    }
+};
 
 
 export class OrderService {
@@ -41,6 +60,14 @@ export class OrderService {
     }
 
     async updateStatus(id: string, request: UpdateOrderStatusRequest) {
+
+        const order = await this.getOrder(id);
+        if (!order) {
+            throw new NotFoundError(`Order ${id} not found`);
+        }
+
+        validateStatusTransition(order.status, request.status);
+
         return prisma.order.update({
             where: { id },
             data: {

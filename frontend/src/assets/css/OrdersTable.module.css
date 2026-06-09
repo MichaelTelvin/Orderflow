@@ -2,16 +2,19 @@
     padding: 20px;
     overflow-x: auto;
     overflow-y: scroll;
+    max-height: 30vh;
+    border: 1px solid rgb(106, 102, 102);
+    border-radius: 5px;
 }
 
 .ordersTable {
     width: 100%;
     border-collapse: collapse;
-    text-align: left;
+    text-align: center;
 }
 
 .ordersTable thead tr {
-    border-bottom: 2px solid #ccc;
+    border-bottom: 2px solid rgb(106, 102, 102);
 }
 
 .ordersTable thead th {
@@ -19,9 +22,15 @@
 }
 
 .ordersTable tbody tr {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid rgb(106, 102, 102);
 }
 
 .ordersTable tbody td {
     padding: 10px;
+}
+
+.statusSelect {
+    padding: 5px;
+    border: 1px solid rgb(106, 102, 102);
+    border-radius: 3px;
 }
