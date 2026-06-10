@@ -78,4 +78,21 @@ const updateOrderStatus = async (orderId: string, status: string) => {
     }
 };
 
-export { listOrders, createOrder, updateOrderStatus };
+const getOrderEvents = async (orderId: string) => {
+    try {
+        const response = await fetch(`${ORDERS_URL}/${orderId}/events`);
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.message ?? `HTTP error! Status: ${response.status}`
+            );
+        }
+        return data;
+
+    } catch (error) {
+        throw error;
+    }
+};
+
+export { listOrders, createOrder, updateOrderStatus, getOrderEvents };

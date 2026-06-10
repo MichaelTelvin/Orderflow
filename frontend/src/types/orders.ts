@@ -16,3 +16,11 @@ export type OrderItem = {
     updatedAt: string;
     items: [];
 };
+
+export type OrderEvent = {
+    id: string;
+    orderId: string;
+    type: string;
+    message: string;
+    createdAt: string;
+};

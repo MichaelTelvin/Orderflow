@@ -81,6 +81,12 @@ export class OrderService {
             },
         });
     }
+
+    async getOrderEvents(orderId: string) {
+        return prisma.orderEvent.findMany({
+            where: { orderId },
+        });
+    }
 }
 
 export const orderService = new OrderService();

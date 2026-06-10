@@ -7,35 +7,30 @@
     border-radius: 5px;
 }
 
-.ordersTable {
+.orderEventsTable {
     width: 100%;
     border-collapse: collapse;
     text-align: center;
 }
 
-.ordersTable thead tr {
+.orderEventsTable thead tr {
     border-bottom: 2px solid rgb(106, 102, 102);
 }
 
-.ordersTable thead th {
+.orderEventsTable thead th {
     padding: 10px;
 }
 
-.ordersTable tbody tr {
+.orderEventsTable tbody tr {
     border-bottom: 1px solid rgb(106, 102, 102);
 }
 
-.ordersTable tbody td {
+.orderEventsTable tbody td {
     padding: 10px;
-}
-
-.statusSelect {
-    padding: 5px;
-    border: 1px solid rgb(106, 102, 102);
-    border-radius: 3px;
 }
 
 .error {
     color: rgb(222, 110, 110);
     margin-bottom: 20px;
+    margin-top: 20px;
 }

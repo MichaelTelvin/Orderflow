@@ -1,34 +1,57 @@
 import { CreateOrderForm } from './components/CreateOrderForm';
 import { OrdersTable } from './components/OrdersTable';
-import { listOrders, updateOrderStatus } from './api/orders.js';
+import { OrderEventsTable } from './components/OrderEventsTable.js';
+import { listOrders, updateOrderStatus, getOrderEvents } from './api/orders.js';
 import { useState, useEffect } from 'react';
-import type { Order } from './types/orders';
+import type { Order, OrderEvent } from './types/orders';
 import './assets/css/App.css';
 
 
 function App() {
 
   const [orders, setOrders] = useState<Order[]>([]);
+  const [orderEvents, setOrderEvents] = useState<OrderEvent[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loadOrderError, setOrderLoadError] = useState<string | null>(null);
+  const [loadOrderEventsError, setOrderEventsLoadError] = useState<string | null>(null);
+  const [statusUpdateError, setStatusUpdateError] = useState<string | null>(null);
 
   useEffect(() => {
-    loadOrders()
+    loadOrders();
   }, []);
 
   const loadOrders = async () => {
     try {
       setLoading(true);
-      setError(null);
+      setOrderLoadError(null);
 
-      const orders = await listOrders();
-      if (!orders) {
+      const dbOrders: Order[] = await listOrders();
+      if (!dbOrders) {
         throw new Error('Failed to fetch orders');
       }
 
-      setOrders(orders);
+      setOrders(dbOrders);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      setOrderLoadError(err instanceof Error ? err.message : 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadOrderEvents = async (orderId: string) => {
+    try {
+      setLoading(true);
+      setOrderEventsLoadError(null);
+
+      const dbOrderEvents: OrderEvent[] = await getOrderEvents(orderId);
+
+      if (!dbOrderEvents) {
+        throw new Error('Failed to fetch order events');
+      }
+
+      setOrderEvents(dbOrderEvents);
+    } catch (err) {
+      setOrderEventsLoadError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
@@ -37,7 +60,6 @@ function App() {
   const changeOrderStatus = async (orderId: string, status: string) => {
 
     try {
-
       const response = await updateOrderStatus(orderId, status);
       if (!response || !response.ok) {
         throw new Error('Failed to update order status');
@@ -50,9 +72,9 @@ function App() {
       ));
 
       loadOrders();
-
+      loadOrderEvents(orderId);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      setStatusUpdateError(err instanceof Error ? err.message : 'Unknown error');
     }
   };
 
@@ -65,12 +87,23 @@ function App() {
         </div>
       </section>
       <section>
-        <div id="orders-container">
+        <div>
           <OrdersTable
             orders={orders}
             loading={loading}
-            error={error}
+            loadError={loadOrderError}
+            statusUpdateError={statusUpdateError}
             onOrderStatusChanged={changeOrderStatus}
+            onOrderClicked={loadOrderEvents}
+          />
+        </div>
+      </section>
+      <section>
+        <div>
+          <OrderEventsTable
+            orderEvents={orderEvents}
+            loading={loading}
+            loadError={loadOrderEventsError}
           />
         </div>
       </section>

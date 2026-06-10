@@ -16,6 +16,11 @@ export async function orderRoutes(fastify: FastifyInstance) {
         return orderService.getOrder(id);
     });
 
+    fastify.get('/:id/events', async (request) => {
+        const { id } = request.params as { id: string };
+        return orderService.getOrderEvents(id);
+    });
+
     fastify.post('/', async (request, reply) => {
         const { customerId, items } = request.body as CreateOrderRequest;
         const order = await orderService.createOrder({
