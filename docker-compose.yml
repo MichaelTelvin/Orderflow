@@ -12,6 +12,9 @@ services:
       context: ./backend
     ports:
       - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
     environment:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/orderflow
       REDIS_HOST: redis
@@ -35,6 +38,21 @@ services:
     image: redis:8-alpine
     ports:
       - "6379:6379"
+
+  worker:
+    build:
+      context: ./backend
+    command: npm run worker
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/orderflow
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - postgres
+      - redis
 
 volumes:
   postgres_data:

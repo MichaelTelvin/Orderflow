@@ -36,7 +36,7 @@ export async function orderRoutes(fastify: FastifyInstance) {
         const { status } = request.body as UpdateOrderStatusRequest;
 
         try {
-            const order = await orderService.updateStatus(id, { status });
+            const order = await orderService.updateStatus(id, status);
             return reply.send(order);
         } catch (error) {
             if (error instanceof AppError) {
