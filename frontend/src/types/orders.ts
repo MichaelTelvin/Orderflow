@@ -3,6 +3,7 @@ export type Order = {
     id: string;
     customerId: string;
     status: string;
+    retryCount: number;
     createdAt: string;
     updatedAt: string;
     items: [];

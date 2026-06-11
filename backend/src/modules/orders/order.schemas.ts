@@ -12,6 +12,3 @@ export const createOrderSchema = z.object({
     items: z.array(createOrderItemSchema).min(1)
 });
 
-export const updateOrderStatusSchema = z.object({
-    status: z.enum(OrderStatus)
-});

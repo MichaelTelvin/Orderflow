@@ -1,7 +1,7 @@
 import { CreateOrderForm } from './components/CreateOrderForm';
 import { OrdersTable } from './components/OrdersTable';
 import { OrderEventsTable } from './components/OrderEventsTable.js';
-import { listOrders, updateOrderStatus, getOrderEvents } from './api/orders.js';
+import { listOrders, getOrderEvents, retryOrder } from './api/orders.js';
 import { useState, useEffect } from 'react';
 import type { Order, OrderEvent } from './types/orders';
 import './assets/css/App.css';
@@ -14,7 +14,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [loadOrderError, setOrderLoadError] = useState<string | null>(null);
   const [loadOrderEventsError, setOrderEventsLoadError] = useState<string | null>(null);
-  const [statusUpdateError, setStatusUpdateError] = useState<string | null>(null);
+  const [orderRetryError, setOrderRetryError] = useState<string | null>(null);
 
   useEffect(() => {
     loadOrders();
@@ -57,25 +57,27 @@ function App() {
     }
   };
 
-  const changeOrderStatus = async (orderId: string, status: string) => {
 
+  const retryOrderProcessing = async (orderId: string) => {
     try {
-      const response = await updateOrderStatus(orderId, status);
-      if (!response || !response.ok) {
-        throw new Error('Failed to update order status');
+      const response = await retryOrder(orderId);
+
+      if (!response.ok) {
+        throw new Error('Failed to retry order');
       }
 
-      setOrders(prev => prev.map(order =>
-        order.id === orderId
-          ? { ...order, status }
-          : order
-      ));
+      setTimeout(loadOrders, 1000);
+      setTimeout(() => loadOrderEvents(orderId), 1000);
 
-      loadOrders();
-      loadOrderEvents(orderId);
     } catch (err) {
-      setStatusUpdateError(err instanceof Error ? err.message : 'Unknown error');
+      setOrderRetryError(err instanceof Error ? err.message : 'Unknown error');
     }
+  };
+
+  const handleOrderCreated = () => {
+    setTimeout(() => {
+      loadOrders();
+    }, 1000);
   };
 
   return (
@@ -83,7 +85,7 @@ function App() {
       <section id="center">
         <div id="form-container">
           <CreateOrderForm
-            onOrderCreated={loadOrders} />
+            onOrderCreated={handleOrderCreated} />
         </div>
       </section>
       <section>
@@ -92,9 +94,9 @@ function App() {
             orders={orders}
             loading={loading}
             loadError={loadOrderError}
-            statusUpdateError={statusUpdateError}
-            onOrderStatusChanged={changeOrderStatus}
+            orderRetryError={orderRetryError}
             onOrderClicked={loadOrderEvents}
+            onOrderRetryClicked={retryOrderProcessing}
           />
         </div>
       </section>

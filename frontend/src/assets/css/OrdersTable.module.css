@@ -29,13 +29,22 @@
     padding: 10px;
 }
 
-.statusSelect {
-    padding: 5px;
-    border: 1px solid rgb(106, 102, 102);
-    border-radius: 3px;
-}
-
 .error {
     color: rgb(222, 110, 110);
     margin-bottom: 20px;
+}
+
+.retryButton {
+    padding: 5px 10px;
+    background-color: rgb(106, 102, 102);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.retryIcon {
+    font-size: 30px;
+    line-height: 1;
+    transition: transform 0.3s ease;
 }

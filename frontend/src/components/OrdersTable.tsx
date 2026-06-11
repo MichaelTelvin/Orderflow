@@ -5,12 +5,12 @@ type OrdersTableProps = {
     orders: Order[];
     loading: boolean;
     loadError: string | null;
-    statusUpdateError: string | null;
-    onOrderStatusChanged: (orderId: string, status: string) => void;
+    orderRetryError: string | null;
     onOrderClicked: (orderId: string) => void;
+    onOrderRetryClicked: (orderId: string) => void;
 };
 
-export const OrdersTable = ({ orders, loading, loadError, statusUpdateError, onOrderStatusChanged, onOrderClicked }: OrdersTableProps) => {
+export const OrdersTable = ({ orders, loading, loadError, orderRetryError, onOrderClicked, onOrderRetryClicked }: OrdersTableProps) => {
 
     const formatDate = (date: string) =>
         new Intl.DateTimeFormat('en-US', {
@@ -28,7 +28,7 @@ export const OrdersTable = ({ orders, loading, loadError, statusUpdateError, onO
 
     return (
         <>
-            {statusUpdateError && (<div className={styles.error} > {statusUpdateError}</div>)}
+            {orderRetryError && (<div className={styles.error} > {orderRetryError}</div>)}
             <div className={styles.tableWrapper}>
                 <table className={styles.ordersTable}>
                     <thead>
@@ -39,6 +39,8 @@ export const OrdersTable = ({ orders, loading, loadError, statusUpdateError, onO
                             <th>CreatedAt</th>
                             <th>UpatedAt</th>
                             <th>Items</th>
+                            <th>Retry Count</th>
+                            <th>Retry</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -56,20 +58,20 @@ export const OrdersTable = ({ orders, loading, loadError, statusUpdateError, onO
                                     {order.id.slice(0, 8)}...
                                 </td>
                                 <td>{order.customerId}</td>
-                                <td>
-                                    <select
-                                        className={styles.statusSelect}
-                                        value={order.status}
-                                        onChange={(e) => onOrderStatusChanged(order.id, e.target.value)}>
-                                        <option value="CREATED">CREATED</option>
-                                        <option value="PROCESSING">PROCESSING</option>
-                                        <option value="COMPLETED">COMPLETED</option>
-                                        <option value="FAILED">FAILED</option>
-                                    </select>
-                                </td>
+                                <td>{order.status}</td>
                                 <td>{formatDate(order.createdAt)}</td>
                                 <td>{formatDate(order.updatedAt)}</td>
                                 <td>{order.items.length}</td>
+                                <td>{order.retryCount}</td>
+                                {order.status === 'FAILED' && (
+                                    <td>
+                                        <button
+                                            className={styles.retryButton}
+                                            onClick={() => onOrderRetryClicked(order.id)}>
+                                            <span className={styles.retryIcon}>↻</span>
+                                        </button>
+                                    </td>
+                                )}
                             </tr>
                         ))}
                     </tbody>
