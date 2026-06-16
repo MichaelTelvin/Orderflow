@@ -2,7 +2,7 @@ import { CreateOrderForm } from './components/CreateOrderForm';
 import { OrdersTable } from './components/OrdersTable';
 import { QueueStatsList } from './components/QueueStatsList.js';
 import { OrderEventsTable } from './components/OrderEventsTable.js';
-import { listOrders, getOrderEvents, retryOrder } from './api/orders.js';
+import { listOrders, getOrderEvents } from './api/orders.js';
 import { getQueueStats } from './api/queue.js';
 import { useState, useEffect } from 'react';
 import type { Order, OrderEvent } from './types/orders';
@@ -18,7 +18,6 @@ function App() {
   const [loadOrderError, setOrderLoadError] = useState<string | null>(null);
   const [loadOrderEventsError, setOrderEventsLoadError] = useState<string | null>(null);
   const [loadQueueStatsError, setLoadQueueStatsError] = useState<string | null>(null);
-  const [orderRetryError, setOrderRetryError] = useState<string | null>(null);
 
   useEffect(() => {
     loadOrders();
@@ -87,22 +86,6 @@ function App() {
     }
   };
 
-  const retryOrderProcessing = async (orderId: string) => {
-    try {
-      const response = await retryOrder(orderId);
-
-      if (!response.ok) {
-        throw new Error('Failed to retry order');
-      }
-
-      setTimeout(loadOrders, 1000);
-      setTimeout(() => loadOrderEvents(orderId), 1000);
-
-    } catch (err) {
-      setOrderRetryError(err instanceof Error ? err.message : 'Unknown error');
-    }
-  };
-
   const handleOrderCreated = () => {
     setTimeout(() => {
       loadOrders();
@@ -123,9 +106,7 @@ function App() {
           orders={orders}
           loading={loading}
           loadError={loadOrderError}
-          orderRetryError={orderRetryError}
           onOrderClicked={loadOrderEvents}
-          onOrderRetryClicked={retryOrderProcessing}
         />
       </section>
       <section>

@@ -5,12 +5,10 @@ type OrdersTableProps = {
     orders: Order[];
     loading: boolean;
     loadError: string | null;
-    orderRetryError: string | null;
     onOrderClicked: (orderId: string) => void;
-    onOrderRetryClicked: (orderId: string) => void;
 };
 
-export const OrdersTable = ({ orders, loading, loadError, orderRetryError, onOrderClicked, onOrderRetryClicked }: OrdersTableProps) => {
+export const OrdersTable = ({ orders, loading, loadError, onOrderClicked }: OrdersTableProps) => {
 
     const formatDate = (date: string) =>
         new Intl.DateTimeFormat('en-US', {
@@ -28,7 +26,6 @@ export const OrdersTable = ({ orders, loading, loadError, orderRetryError, onOrd
 
     return (
         <>
-            {orderRetryError && (<div className={styles.error} > {orderRetryError}</div>)}
             <div className={styles.tableWrapper}>
                 <table className={styles.ordersTable}>
                     <thead>
@@ -40,7 +37,6 @@ export const OrdersTable = ({ orders, loading, loadError, orderRetryError, onOrd
                             <th>UpatedAt</th>
                             <th>Items</th>
                             <th>Retry Count</th>
-                            <th>Retry</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -63,15 +59,6 @@ export const OrdersTable = ({ orders, loading, loadError, orderRetryError, onOrd
                                 <td>{formatDate(order.updatedAt)}</td>
                                 <td>{order.items.length}</td>
                                 <td>{order.retryCount}</td>
-                                {order.status === 'FAILED' && (
-                                    <td>
-                                        <button
-                                            className={styles.retryButton}
-                                            onClick={() => onOrderRetryClicked(order.id)}>
-                                            <span className={styles.retryIcon}>↻</span>
-                                        </button>
-                                    </td>
-                                )}
                             </tr>
                         ))}
                     </tbody>
