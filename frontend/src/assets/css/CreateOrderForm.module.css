@@ -1,32 +1,24 @@
 .formContainer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin: 2rem auto;
-    padding: 2rem;
+    padding: 1rem 2.85rem;
     border-radius: 10px;
     background-color: #2e2c2c;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .formGroup {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1.5rem;
-    flex: 1 1 200px;
-    gap: 8px;
+    margin-bottom: 1.2rem;
     align-items: center;
 }
 
 .label {
     display: flex;
     margin-bottom: 0.5rem;
-    font-weight: 600;
+    font-weight: 400;
     color: #888484;
 }
 
 .input {
-    padding: 0.75rem;
+    padding: 0.6rem;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 1rem;
@@ -40,7 +32,7 @@
 }
 
 .submitButton {
-    width: 30%;
+    width: 100%;
     padding: 0.75rem;
     background-color: #0070f3;
     color: white;

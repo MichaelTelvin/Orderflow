@@ -1,8 +1,8 @@
 #center {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   margin-top: 2rem;
-  place-items: center;
+  gap: 40px;
 
   @media (max-width: 1024px) {
     padding: 32px 20px 24px;

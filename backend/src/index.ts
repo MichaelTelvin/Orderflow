@@ -1,6 +1,7 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors';
 import { orderRoutes } from './modules/orders/order.routes.js';
+import { queueRoutes } from './modules/queue/queue.routes.js';
 
 
 const fastify = Fastify({
@@ -14,6 +15,10 @@ fastify.register(cors, {
 
 fastify.register(orderRoutes, {
     prefix: '/api/orders'
+});
+
+fastify.register(queueRoutes, {
+    prefix: '/api/queue'
 });
 
 fastify.get('/health', async () => {

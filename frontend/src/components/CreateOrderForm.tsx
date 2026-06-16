@@ -63,39 +63,40 @@ export const CreateOrderForm = ({ onOrderCreated }: OrderProps) => {
     }
 
     return (
-        <form className={styles.formContainer} onSubmit={handleSubmit}>
-            <div className={styles.formGroup}>
-                <label className={styles.label} htmlFor="customerId">Customer ID</label>
-                <input
-                    className={styles.input}
-                    name="customerId"
-                    value={form.customerId}
-                    onChange={handleChange}
-                />
-            </div>
-            <div className={styles.formGroup}>
-                <label className={styles.label} htmlFor="sku">SKU</label>
-                <input
-                    className={styles.input}
-                    name="sku"
-                    value={form.items[0].sku}
-                    onChange={handleItemChange}
-                />
-            </div>
-            <div className={styles.formGroup}>
-                <label className={styles.label} htmlFor="quantity">Quantity</label>
-                <input
-                    className={styles.input}
-                    name="quantity"
-                    type="number"
-                    value={form.items[0].quantity}
-                    onChange={handleItemChange}
-                />
-            </div>
-            <div className={styles.formGroup}>
-                <button className={styles.submitButton} type="submit">Submit</button>
-            </div>
-
-        </form>
+        <div>
+            <form className={styles.formContainer} onSubmit={handleSubmit}>
+                <div className={styles.formGroup}>
+                    <label className={styles.label} htmlFor="customerId">Customer ID</label>
+                    <input
+                        className={styles.input}
+                        name="customerId"
+                        value={form.customerId}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className={styles.formGroup}>
+                    <label className={styles.label} htmlFor="sku">SKU</label>
+                    <input
+                        className={styles.input}
+                        name="sku"
+                        value={form.items[0].sku}
+                        onChange={handleItemChange}
+                    />
+                </div>
+                <div className={styles.formGroup}>
+                    <label className={styles.label} htmlFor="quantity">Quantity</label>
+                    <input
+                        className={styles.input}
+                        name="quantity"
+                        type="number"
+                        value={form.items[0].quantity}
+                        onChange={handleItemChange}
+                    />
+                </div>
+                <div className={styles.formGroup}>
+                    <button className={styles.submitButton} type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
     )
 }

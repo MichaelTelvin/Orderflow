@@ -76,7 +76,7 @@ export const OrdersTable = ({ orders, loading, loadError, orderRetryError, onOrd
                         ))}
                     </tbody>
                 </table>
-            </div >
+            </div>
         </>
     );
 };

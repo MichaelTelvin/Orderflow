@@ -1,7 +1,9 @@
 import { CreateOrderForm } from './components/CreateOrderForm';
 import { OrdersTable } from './components/OrdersTable';
+import { QueueStatsList } from './components/QueueStatsList.js';
 import { OrderEventsTable } from './components/OrderEventsTable.js';
 import { listOrders, getOrderEvents, retryOrder } from './api/orders.js';
+import { getQueueStats } from './api/queue.js';
 import { useState, useEffect } from 'react';
 import type { Order, OrderEvent } from './types/orders';
 import './assets/css/App.css';
@@ -11,14 +13,42 @@ function App() {
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [orderEvents, setOrderEvents] = useState<OrderEvent[]>([]);
+  const [queueStats, setQueueStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [loadOrderError, setOrderLoadError] = useState<string | null>(null);
   const [loadOrderEventsError, setOrderEventsLoadError] = useState<string | null>(null);
+  const [loadQueueStatsError, setLoadQueueStatsError] = useState<string | null>(null);
   const [orderRetryError, setOrderRetryError] = useState<string | null>(null);
 
   useEffect(() => {
     loadOrders();
   }, []);
+
+  useEffect(() => {
+    loadQueueStats();
+    const interval = setInterval(
+      loadQueueStats,
+      5000
+    );
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const loadQueueStats = async () => {
+    try {
+      setLoadQueueStatsError(null);
+
+      const procQueueStats: any = await getQueueStats();
+      if (!procQueueStats) {
+        throw new Error('Failed to fetch queue stats');
+      }
+
+      setQueueStats(procQueueStats);
+    } catch (err) {
+      setLoadQueueStatsError(err instanceof Error ? err.message : 'Unknown error');
+    }
+  };
+
 
   const loadOrders = async () => {
     try {
@@ -57,7 +87,6 @@ function App() {
     }
   };
 
-
   const retryOrderProcessing = async (orderId: string) => {
     try {
       const response = await retryOrder(orderId);
@@ -83,31 +112,28 @@ function App() {
   return (
     <>
       <section id="center">
-        <div id="form-container">
-          <CreateOrderForm
-            onOrderCreated={handleOrderCreated} />
-        </div>
+        <CreateOrderForm
+          onOrderCreated={handleOrderCreated} />
+        <QueueStatsList
+          queueStats={queueStats}
+          loadError={loadQueueStatsError} />
       </section>
       <section>
-        <div>
-          <OrdersTable
-            orders={orders}
-            loading={loading}
-            loadError={loadOrderError}
-            orderRetryError={orderRetryError}
-            onOrderClicked={loadOrderEvents}
-            onOrderRetryClicked={retryOrderProcessing}
-          />
-        </div>
+        <OrdersTable
+          orders={orders}
+          loading={loading}
+          loadError={loadOrderError}
+          orderRetryError={orderRetryError}
+          onOrderClicked={loadOrderEvents}
+          onOrderRetryClicked={retryOrderProcessing}
+        />
       </section>
       <section>
-        <div>
-          <OrderEventsTable
-            orderEvents={orderEvents}
-            loading={loading}
-            loadError={loadOrderEventsError}
-          />
-        </div>
+        <OrderEventsTable
+          orderEvents={orderEvents}
+          loading={loading}
+          loadError={loadOrderEventsError}
+        />
       </section>
     </>
   )
