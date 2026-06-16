@@ -6,6 +6,8 @@ type QueueStats = {
     completed: number;
     failed: number;
     delayed: number;
+    paused: number;
+    prioritized: number;
 };
 
 type queueStatsListProps = {

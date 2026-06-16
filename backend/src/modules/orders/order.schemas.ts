@@ -1,5 +1,4 @@
 import * as z from 'zod';
-import { OrderStatus } from '../../../generated/prisma/enums.js';
 
 
 export const createOrderItemSchema = z.object({

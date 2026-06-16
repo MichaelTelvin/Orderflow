@@ -42,6 +42,7 @@ enum OrderEventType {
     PROCESSING_FAILED
     RETRY_REQUESTED
     ORDER_COMPLETED
+    RETRY_LIMIT_EXCEEDED
 }
 
 enum OrderStatus {

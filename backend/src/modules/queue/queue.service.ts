@@ -6,14 +6,6 @@ export class QueueService {
     async getStats() {
         return await orderProcessingQueue.getJobCounts();
     }
-
-    async pause() {
-
-    }
-
-    async resume() {
-
-    }
 }
 
 export const queueService = new QueueService();
