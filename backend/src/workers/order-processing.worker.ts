@@ -25,6 +25,13 @@ worker.on('failed', async (job, error) => {
         return;
     }
 
+    if (job.attemptsMade > 0) {
+        await orderService.setRetryCount(
+            job.data.orderId,
+            job.attemptsMade
+        );
+    }
+
     if (job.attemptsMade >= (job.opts.attempts ?? 1)) {
 
         await orderDlqQueue.add('dead-order', {

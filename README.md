@@ -30,7 +30,6 @@ The project focuses on reliability, observability, and operational tooling rathe
 - Order lifecycle management
 - State transitions
 - Idempotent API operations
-- Optimistic locking
 
 ### Reliability
 - Background job processing

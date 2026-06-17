@@ -103,6 +103,7 @@ export class OrderService {
     }
 
     async getOrderEvents(orderId: string) {
+
         return prisma.orderEvent.findMany({
             where: { orderId },
         });
@@ -130,12 +131,23 @@ export class OrderService {
     }
 
     async emitOrderEvent(orderId: string, type: OrderEventType, message: string) {
+
         await prisma.orderEvent.create({
             data: {
                 orderId,
                 type,
                 message,
             },
+        });
+    }
+
+    async setRetryCount(orderId: string, attemptsMade: number) {
+
+        await prisma.order.update({
+            where: { id: orderId },
+            data: {
+                retryCount: attemptsMade
+            }
         });
     }
 }
