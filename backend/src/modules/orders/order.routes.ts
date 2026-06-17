@@ -1,5 +1,6 @@
 import type { CreateOrderRequest } from './order.types.js';
 import { orderService } from './order.service.js';
+import { rateLimit } from '../../middleware/rate-limit.js';
 import { FastifyInstance } from 'fastify';
 
 export async function orderRoutes(fastify: FastifyInstance) {
@@ -17,14 +18,16 @@ export async function orderRoutes(fastify: FastifyInstance) {
         return orderService.getOrderEvents(id);
     });
 
-    fastify.post('/', async (request, reply) => {
-        const { idempotencyKey, customerId, items } = request.body as CreateOrderRequest;
-        const order = await orderService.createOrder({
-            idempotencyKey,
-            customerId,
-            items
-        });
+    fastify.post('/', { preHandler: [rateLimit] },
+        async (request, reply) => {
 
-        return reply.code(201).send(order);
-    });
+            const { idempotencyKey, customerId, items } = request.body as CreateOrderRequest;
+            const order = await orderService.createOrder({
+                idempotencyKey,
+                customerId,
+                items
+            });
+
+            return reply.code(201).send(order);
+        });
 } 

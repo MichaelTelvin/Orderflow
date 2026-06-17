@@ -6,18 +6,12 @@ import { orderDlqQueue } from '../queues/order-dlq.queue.js';
 const worker = new Worker(
     'order-processing',
     async (job) => {
-        console.log('Processing order:', job.data.orderId);
         await orderService.processOrder(job.data.orderId);
     }, {
     connection: {
         host: process.env.REDIS_HOST || 'redis',
         port: 6379,
-    },
-}
-);
-
-worker.on('completed', (job) => {
-    console.log(`Job ${job.id} completed`);
+    }
 });
 
 worker.on('failed', async (job, error) => {
