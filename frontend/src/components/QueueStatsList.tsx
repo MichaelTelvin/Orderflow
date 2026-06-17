@@ -1,17 +1,9 @@
 import styles from '../assets/css/QueueStatsList.module.css';
+import type { QueueStats } from '../types/queue';
 
-type QueueStats = {
-    waiting: number;
-    active: number;
-    completed: number;
-    failed: number;
-    delayed: number;
-    paused: number;
-    prioritized: number;
-};
 
 type queueStatsListProps = {
-    queueStats: QueueStats[];
+    queueStats: QueueStats | null;
     loadError: string | null;
 };
 
@@ -27,15 +19,17 @@ export const QueueStatsList = ({ queueStats, loadError }: queueStatsListProps) =
 
     return (
         <div className={styles.queueStatsContainer}>
-            <div>
-                <h2>Queue Stats</h2>
-            </div>
+            <h2>Queue Stats</h2>
+            <h3>Order Processing</h3>
             <ul className={styles.queueStatsList}>
-                {Object.entries(queueStats).map(([key, value]) => (
-                    <li key={key}>
-                        {key}: {value.toString()}
-                    </li>
-                ))}
+                <li>Waiting: {queueStats.process.waiting}</li>
+                <li>Active: {queueStats.process.active}</li>
+                <li>Completed: {queueStats.process.completed}</li>
+                <li>Failed: {queueStats.process.failed}</li>
+            </ul>
+            <h3>Dead Letter Queue</h3>
+            <ul className={styles.queueStatsList}>
+                <li>Size: {queueStats.dlq.size}</li>
             </ul>
         </div>
     );

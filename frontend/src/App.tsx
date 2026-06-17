@@ -6,6 +6,7 @@ import { listOrders, getOrderEvents } from './api/orders.js';
 import { getQueueStats } from './api/queue.js';
 import { useState, useEffect } from 'react';
 import type { Order, OrderEvent } from './types/orders';
+import type { QueueStats } from './types/queue';
 import './assets/css/App.css';
 
 
@@ -13,7 +14,7 @@ function App() {
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [orderEvents, setOrderEvents] = useState<OrderEvent[]>([]);
-  const [queueStats, setQueueStats] = useState<any>(null);
+  const [queueStats, setQueueStats] = useState<QueueStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadOrderError, setOrderLoadError] = useState<string | null>(null);
   const [loadOrderEventsError, setOrderEventsLoadError] = useState<string | null>(null);
