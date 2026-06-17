@@ -8,6 +8,7 @@ export const createOrderItemSchema = z.object({
 
 export const createOrderSchema = z.object({
     customerId: z.string().min(3),
+    idempotencyKey: z.string().min(3),
     items: z.array(createOrderItemSchema).min(1)
 });
 

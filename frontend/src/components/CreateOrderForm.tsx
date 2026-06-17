@@ -49,6 +49,7 @@ export const CreateOrderForm = ({ onOrderCreated }: OrderProps) => {
         e.preventDefault()
 
         const payload = {
+            idempotencyKey: crypto.randomUUID(),
             customerId: form.customerId,
             items: form.items.map(item => ({
                 sku: item.sku,

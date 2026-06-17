@@ -6,6 +6,7 @@ type Item = {
 };
 
 type OrderRequest = {
+    idempotencyKey: string,
     customerId: string,
     items: Item[]
 };

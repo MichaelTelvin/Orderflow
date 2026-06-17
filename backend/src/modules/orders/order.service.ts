@@ -49,8 +49,19 @@ export class OrderService {
 
     async createOrder(request: CreateOrderRequest) {
 
+        const existing = await prisma.order.findUnique({
+            where: {
+                idempotencyKey: request.idempotencyKey
+            }
+        });
+
+        if (existing) {
+            return existing;
+        }
+
         const order = await prisma.order.create({
             data: {
+                idempotencyKey: request.idempotencyKey,
                 customerId: request.customerId,
                 items: {
                     create: request.items,
