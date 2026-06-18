@@ -44,6 +44,7 @@ enum OrderEventType {
     RETRY_REQUESTED
     ORDER_COMPLETED
     RETRY_LIMIT_EXCEEDED
+    DLQ_REQUEUED
 }
 
 enum OrderStatus {
