@@ -1,0 +1,14 @@
+.appSection {
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 2rem;
+}
+
+.masterDetail {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid rgb(106, 102, 102);
+  border-radius: 6px;
+  height: 70vh;
+  overflow-y: scroll;
+}

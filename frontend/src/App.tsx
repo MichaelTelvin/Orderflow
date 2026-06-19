@@ -1,13 +1,13 @@
 import type { Order, OrderEvent, OrderSummary } from './types/orders';
 import type { QueueStats } from './types/queue';
 import { CreateOrderPanel } from './components/CreateOrderPanel.js';
-import { OrdersTable } from './components/OrdersTable';
+import { OrdersList } from './components/OrdersList.js';
 import { DashboardSummary } from './components/DashboardSummary.js';
-import { OrderEventsTable } from './components/OrderEventsTable.js';
+import { OrderDetails } from './components/OrderDetails.js';
 import { listOrders, getOrderEvents } from './api/orders.js';
 import { getQueueStats } from './api/queue.js';
 import { useState, useEffect, useMemo } from 'react';
-import './assets/css/App.css';
+import styles from './assets/css/App.module.css';
 
 
 function App() {
@@ -31,16 +31,6 @@ function App() {
 
     return () => clearInterval(interval);
   }, [selectedOrderId]);
-
-
-  const refreshDashboard = async () => {
-    await Promise.all([
-      loadOrders(),
-      loadQueueStats(),
-      selectedOrderId ? loadOrderEvents(selectedOrderId) : Promise.resolve(),
-    ]);
-  };
-
 
   const buildOrderSummary = (orders: Order[]): OrderSummary => {
     return orders.reduce<OrderSummary>((acc, order) => {
@@ -70,6 +60,23 @@ function App() {
   );
 
 
+  const selectedOrder = useMemo(
+    () => selectedOrderId
+      ? orders.find(order => order.id === selectedOrderId) ?? null
+      : null,
+    [orders, selectedOrderId]
+  );
+
+
+  const refreshDashboard = async () => {
+    await Promise.all([
+      loadOrders(),
+      loadQueueStats(),
+      selectedOrderId ? loadOrderEvents(selectedOrderId) : Promise.resolve(),
+    ]);
+  };
+
+
   const loadQueueStats = async () => {
     try {
       setLoadQueueStatsError(null);
@@ -88,7 +95,6 @@ function App() {
 
   const loadOrders = async () => {
     try {
-      setOrdersLoading(true);
       setOrderLoadError(null);
 
       const dbOrders: Order[] = await listOrders();
@@ -107,7 +113,6 @@ function App() {
 
   const loadOrderEvents = async (orderId: string) => {
     try {
-      setEventsLoading(true);
       setOrderEventsLoadError(null);
 
       const dbOrderEvents: OrderEvent[] = await getOrderEvents(orderId);
@@ -126,7 +131,7 @@ function App() {
 
 
   const handleOrderCreated = () => {
-    setTimeout(() => {
+    setTimeout(async () => {
       refreshDashboard();
     }, 1000);
   };
@@ -137,28 +142,28 @@ function App() {
     await loadOrderEvents(orderId);
   };
 
+
   return (
     <>
-      <section>
+      <section className={styles.appSection}>
         <DashboardSummary
           orderSummary={orderSummary}
           queueStats={queueStats}
           loadError={loadQueueStatsError} />
       </section>
-      <section>
+      <section className={styles.appSection}>
         <CreateOrderPanel
           onOrderCreated={handleOrderCreated} />
       </section>
-      <section>
-        <OrdersTable
+      <section className={`${styles.appSection} ${styles.masterDetail}`}>
+        <OrdersList
           orders={orders}
           loading={ordersLoading}
           loadError={loadOrderError}
           onOrderClicked={handleOrderSelected}
         />
-      </section>
-      <section>
-        <OrderEventsTable
+        <OrderDetails
+          order={selectedOrder}
           orderEvents={orderEvents}
           loading={eventsLoading}
           loadError={loadOrderEventsError}
@@ -167,14 +172,5 @@ function App() {
     </>
   )
 }
-
-{/* <DashboardSummary />
-
-<CreateOrderPanel onOrderCreated={refreshAll} />
-
-<div className={styles.content}>
-  <OrdersList ... />
-  <OrderDetails ... />
-</div> */}
 
 export default App
