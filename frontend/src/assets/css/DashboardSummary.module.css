@@ -1,0 +1,20 @@
+.summaryContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    background-color: #2e2c2c;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 1rem;
+    margin-top: 2rem;
+}
+
+.summaryItem {
+    width: 10rem
+}
+
+.error {
+    color: rgb(222, 110, 110);
+    margin-bottom: 20px;
+}

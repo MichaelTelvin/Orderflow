@@ -1,12 +1,12 @@
-import { CreateOrderForm } from './components/CreateOrderForm';
+import type { Order, OrderEvent, OrderSummary } from './types/orders';
+import type { QueueStats } from './types/queue';
+import { CreateOrderPanel } from './components/CreateOrderPanel.js';
 import { OrdersTable } from './components/OrdersTable';
-import { QueueStatsList } from './components/QueueStatsList.js';
+import { DashboardSummary } from './components/DashboardSummary.js';
 import { OrderEventsTable } from './components/OrderEventsTable.js';
 import { listOrders, getOrderEvents } from './api/orders.js';
 import { getQueueStats } from './api/queue.js';
-import { useState, useEffect } from 'react';
-import type { Order, OrderEvent } from './types/orders';
-import type { QueueStats } from './types/queue';
+import { useState, useEffect, useMemo } from 'react';
 import './assets/css/App.css';
 
 
@@ -15,24 +15,60 @@ function App() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [orderEvents, setOrderEvents] = useState<OrderEvent[]>([]);
   const [queueStats, setQueueStats] = useState<QueueStats | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [ordersLoading, setOrdersLoading] = useState(true);
+  const [eventsLoading, setEventsLoading] = useState(true);
   const [loadOrderError, setOrderLoadError] = useState<string | null>(null);
   const [loadOrderEventsError, setOrderEventsLoadError] = useState<string | null>(null);
   const [loadQueueStatsError, setLoadQueueStatsError] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadOrders();
-  }, []);
 
   useEffect(() => {
-    loadQueueStats();
-    const interval = setInterval(
-      loadQueueStats,
-      5000
-    );
+    refreshDashboard();
+    const interval = setInterval(() => {
+      refreshDashboard();
+    }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [selectedOrderId]);
+
+
+  const refreshDashboard = async () => {
+    await Promise.all([
+      loadOrders(),
+      loadQueueStats(),
+      selectedOrderId ? loadOrderEvents(selectedOrderId) : Promise.resolve(),
+    ]);
+  };
+
+
+  const buildOrderSummary = (orders: Order[]): OrderSummary => {
+    return orders.reduce<OrderSummary>((acc, order) => {
+      switch (order.status) {
+        case 'COMPLETED':
+          acc.completed++;
+          break;
+        case 'FAILED':
+          acc.failed++;
+          break;
+        case 'PROCESSING':
+          acc.processing++;
+          break;
+      }
+      return acc;
+    }, {
+      completed: 0,
+      failed: 0,
+      processing: 0,
+    });
+  };
+
+
+  const orderSummary = useMemo(
+    () => buildOrderSummary(orders),
+    [orders]
+  );
+
 
   const loadQueueStats = async () => {
     try {
@@ -52,7 +88,7 @@ function App() {
 
   const loadOrders = async () => {
     try {
-      setLoading(true);
+      setOrdersLoading(true);
       setOrderLoadError(null);
 
       const dbOrders: Order[] = await listOrders();
@@ -64,13 +100,14 @@ function App() {
     } catch (err) {
       setOrderLoadError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
-      setLoading(false);
+      setOrdersLoading(false);
     }
   };
 
+
   const loadOrderEvents = async (orderId: string) => {
     try {
-      setLoading(true);
+      setEventsLoading(true);
       setOrderEventsLoadError(null);
 
       const dbOrderEvents: OrderEvent[] = await getOrderEvents(orderId);
@@ -83,42 +120,61 @@ function App() {
     } catch (err) {
       setOrderEventsLoadError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
-      setLoading(false);
+      setEventsLoading(false);
     }
   };
 
+
   const handleOrderCreated = () => {
     setTimeout(() => {
-      loadOrders();
+      refreshDashboard();
     }, 1000);
+  };
+
+
+  const handleOrderSelected = async (orderId: string) => {
+    setSelectedOrderId(orderId);
+    await loadOrderEvents(orderId);
   };
 
   return (
     <>
-      <section id="center">
-        <CreateOrderForm
-          onOrderCreated={handleOrderCreated} />
-        <QueueStatsList
+      <section>
+        <DashboardSummary
+          orderSummary={orderSummary}
           queueStats={queueStats}
           loadError={loadQueueStatsError} />
       </section>
       <section>
+        <CreateOrderPanel
+          onOrderCreated={handleOrderCreated} />
+      </section>
+      <section>
         <OrdersTable
           orders={orders}
-          loading={loading}
+          loading={ordersLoading}
           loadError={loadOrderError}
-          onOrderClicked={loadOrderEvents}
+          onOrderClicked={handleOrderSelected}
         />
       </section>
       <section>
         <OrderEventsTable
           orderEvents={orderEvents}
-          loading={loading}
+          loading={eventsLoading}
           loadError={loadOrderEventsError}
         />
       </section>
     </>
   )
 }
+
+{/* <DashboardSummary />
+
+<CreateOrderPanel onOrderCreated={refreshAll} />
+
+<div className={styles.content}>
+  <OrdersList ... />
+  <OrderDetails ... />
+</div> */}
 
 export default App

@@ -2,7 +2,7 @@
 export type Order = {
     id: string;
     customerId: string;
-    status: string;
+    status: OrderStatus;
     retryCount: number;
     createdAt: string;
     updatedAt: string;
@@ -15,7 +15,6 @@ export type OrderItem = {
     status: string;
     createdAt: string;
     updatedAt: string;
-    items: [];
 };
 
 export type OrderEvent = {
@@ -24,4 +23,16 @@ export type OrderEvent = {
     type: string;
     message: string;
     createdAt: string;
+};
+
+export type OrderStatus =
+    | 'CREATED'
+    | 'PROCESSING'
+    | 'COMPLETED'
+    | 'FAILED';
+
+export type OrderSummary = {
+    completed: number;
+    failed: number;
+    processing: number;
 };

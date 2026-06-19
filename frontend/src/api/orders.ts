@@ -1,14 +1,14 @@
 
 
 type Item = {
-    sku: string,
-    quantity: number
+    sku: string;
+    quantity: number;
 };
 
 type OrderRequest = {
-    idempotencyKey: string,
-    customerId: string,
-    items: Item[]
+    idempotencyKey: string;
+    customerId: string;
+    items: Item[];
 };
 
 const API_BASE_URL = 'http://localhost:3000';
