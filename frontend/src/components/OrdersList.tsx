@@ -23,7 +23,7 @@ export const OrdersList = (
     return (
         <div className={styles.ordersList}>
             {orders.length === 0 ? (
-                <div>No orders found</div>
+                <div className={styles.messagePlaceholder}>No orders found</div>
             ) : (
                 orders.map(order => (
                     <div

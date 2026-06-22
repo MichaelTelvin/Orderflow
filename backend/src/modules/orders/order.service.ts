@@ -70,15 +70,7 @@ export class OrderService {
         });
 
         await this.emitOrderEvent(order.id, 'ORDER_CREATED', `Order created.`);
-        await orderProcessingQueue.add('process-order', { orderId: order.id },
-            {
-                attempts: 3,
-                backoff: {
-                    type: 'exponential',
-                    delay: 5000,
-                },
-            }
-        );
+        await orderProcessingQueue.add('process-order', { orderId: order.id });
 
         return order;
     }
@@ -141,12 +133,25 @@ export class OrderService {
         });
     }
 
-    async setRetryCount(orderId: string, attemptsMade: number) {
+
+    async retryOrder(id: string) {
+
+        const order = await this.getOrder(id);
+        if (!order) {
+            throw new NotFoundError(`Order ${id} not found`);
+        }
+        if (order.status !== 'FAILED') {
+            throw new InvalidStatusTransitionError(`Only orders with FAILED status can be retried, id: ${id}.`);
+        }
+
+        await orderProcessingQueue.add('process-order', { orderId: order.id });
 
         await prisma.order.update({
-            where: { id: orderId },
+            where: { id },
             data: {
-                retryCount: attemptsMade
+                retryCount: {
+                    increment: 1
+                }
             }
         });
     }

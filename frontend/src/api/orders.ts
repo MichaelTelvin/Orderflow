@@ -96,5 +96,29 @@ const getOrderEvents = async (orderId: string) => {
     }
 };
 
+const retryOrder = async (orderId: string) => {
+    try {
+        const response = await fetch(`${ORDERS_URL}/${orderId}/retry`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': 'Bearer AUTH_TOKEN'
+            },
+            body: JSON.stringify({ orderId })
+        });
 
-export { listOrders, createOrder, updateOrderStatus, getOrderEvents };
+        if (!response.ok) {
+            const errorBody = await response.json();
+            throw new Error(
+                errorBody.message ?? `HTTP error! Status: ${response.status}`
+            );
+        }
+        return response;
+
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+export { listOrders, createOrder, updateOrderStatus, getOrderEvents, retryOrder };

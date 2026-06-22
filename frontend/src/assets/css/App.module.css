@@ -9,7 +9,7 @@
   flex-direction: row;
   border: 1px solid rgb(106, 102, 102);
   border-radius: 6px;
-  height: 75vh;
+  height: 80vh;
   overflow-y: scroll;
 }
 

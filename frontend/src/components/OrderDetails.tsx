@@ -1,14 +1,23 @@
 import styles from '../assets/css/OrderDetails.module.css';
 import type { Order, OrderEvent } from '../types/orders';
 
-type OrderEventsTableProps = {
+type OrderDetailsProps = {
     order: Order | null;
     orderEvents: OrderEvent[];
     loading: boolean;
     loadError: string | null;
+    orderRetryError: string | null;
+    onOrderRetryClicked: (orderId: string) => void;
 };
 
-export const OrderDetails = ({ order, orderEvents, loading, loadError }: OrderEventsTableProps) => {
+export const OrderDetails = ({
+    order,
+    orderEvents,
+    loading,
+    loadError,
+    orderRetryError,
+    onOrderRetryClicked
+}: OrderDetailsProps) => {
 
     if (!order) {
         return <div className={styles.messagePlaceholder}>Select an order to view details</div>;
@@ -70,9 +79,21 @@ export const OrderDetails = ({ order, orderEvents, loading, loadError }: OrderEv
                     </ul>
                 )}
             </section>
-            <section className={styles.orderDetailsSection}>
-                <h2>Actions</h2>
-            </section>
+            {order.status === 'FAILED' && (
+                <>
+                    <section className={styles.orderDetailsSection}>
+                        {orderRetryError && (<div className={styles.error} > {orderRetryError}</div>)}
+                        <h2>Actions</h2>
+                        <div>
+                            <button
+                                className={styles.retryButton}
+                                onClick={() => onOrderRetryClicked(order.id)}>
+                                Retry
+                            </button>
+                        </div>
+                    </section>
+                </>
+            )}
         </div>
     );
 };

@@ -33,6 +33,7 @@
 
 .orderDetailsSection h2 {
     color: #b3b5b7;
+    margin-bottom: 1rem;
 }
 
 .orderDetailsSection li {
@@ -54,4 +55,15 @@
 
 .error {
     color: rgb(222, 110, 110);
+}
+
+.retryButton {
+    padding: 12px;
+    font-size: 15px;
+    cursor: pointer;
+    background-color: #67656a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgb(20 19 19);
+    border-radius: 6px;
+    width: 6rem;
 }

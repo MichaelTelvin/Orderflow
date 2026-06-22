@@ -30,4 +30,9 @@ export async function orderRoutes(fastify: FastifyInstance) {
 
             return reply.code(201).send(order);
         });
+
+    fastify.post('/:id/retry', async (request) => {
+        const { id } = request.params as { id: string };
+        return await orderService.retryOrder(id);
+    });
 } 

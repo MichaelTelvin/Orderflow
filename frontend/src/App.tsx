@@ -4,7 +4,7 @@ import { CreateOrderPanel } from './components/CreateOrderPanel.js';
 import { OrdersList } from './components/OrdersList.js';
 import { DashboardSummary } from './components/DashboardSummary.js';
 import { OrderDetails } from './components/OrderDetails.js';
-import { listOrders, getOrderEvents } from './api/orders.js';
+import { listOrders, getOrderEvents, retryOrder } from './api/orders.js';
 import { getQueueStats } from './api/queue.js';
 import { useState, useEffect, useMemo } from 'react';
 import styles from './assets/css/App.module.css';
@@ -16,6 +16,7 @@ function App() {
   const [orderEvents, setOrderEvents] = useState<OrderEvent[]>([]);
   const [queueStats, setQueueStats] = useState<QueueStats | null>(null);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [orderRetryError, setOrderRetryError] = useState<string | null>(null);
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [eventsLoading, setEventsLoading] = useState(true);
   const [loadOrderError, setOrderLoadError] = useState<string | null>(null);
@@ -142,6 +143,19 @@ function App() {
     await loadOrderEvents(orderId);
   };
 
+  const retryOrderProcessing = async (orderId: string) => {
+    try {
+      const response = await retryOrder(orderId);
+
+      if (!response.ok) {
+        throw new Error('Failed to retry order');
+      }
+
+    } catch (err) {
+      setOrderRetryError(err instanceof Error ? err.message : 'Unknown error');
+    }
+  };
+
 
   return (
     <>
@@ -165,6 +179,8 @@ function App() {
           orderEvents={orderEvents}
           loading={eventsLoading}
           loadError={loadOrderEventsError}
+          orderRetryError={orderRetryError}
+          onOrderRetryClicked={retryOrderProcessing}
         />
       </section>
     </>

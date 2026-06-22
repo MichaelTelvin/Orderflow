@@ -40,7 +40,7 @@
 }
 
 .failed {
-    background-color: #e23a3a;
+    background-color: #9d2626;
 }
 
 .processing {
@@ -49,4 +49,13 @@
 
 .error {
     color: rgb(222, 110, 110);
+}
+
+.messagePlaceholder {
+    padding: 30px;
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 1.5rem;
+    color: #515050;
 }
