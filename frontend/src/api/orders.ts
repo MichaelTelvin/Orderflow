@@ -104,7 +104,7 @@ const retryOrder = async (orderId: string) => {
                 'Content-Type': 'application/json',
                 // 'Authorization': 'Bearer AUTH_TOKEN'
             },
-            body: JSON.stringify({ orderId })
+            body: JSON.stringify({})
         });
 
         if (!response.ok) {

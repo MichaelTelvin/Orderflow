@@ -33,18 +33,10 @@ export class QueueService {
             throw new NotFoundError(`Job for order ${orderId} not found`);
         }
 
-        await orderProcessingQueue.add('process-order', { orderId },
-            {
-                attempts: 3,
-                backoff: {
-                    type: 'exponential',
-                    delay: 5000,
-                },
-            }
-        );
+        await orderService.resetRetryCount(orderId);
+        await orderProcessingQueue.add('process-order', { orderId });
 
         await orderJob.remove();
-
         await orderService.emitOrderEvent(
             orderId,
             'DLQ_REQUEUED',

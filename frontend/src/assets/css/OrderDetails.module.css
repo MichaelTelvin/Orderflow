@@ -40,6 +40,11 @@
     margin-bottom: 1rem;
 }
 
+.orderDetailsSection ul {
+    height: 40vh;
+    overflow-y: scroll;
+}
+
 .orderDate {
     font-size: 0.85rem;
 }
@@ -57,7 +62,7 @@
     color: rgb(222, 110, 110);
 }
 
-.retryButton {
+.actionButton {
     padding: 12px;
     font-size: 15px;
     cursor: pointer;
@@ -65,5 +70,6 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     border: 1px solid rgb(20 19 19);
     border-radius: 6px;
-    width: 6rem;
+    width: max-content;
+    cursor: pointer;
 }

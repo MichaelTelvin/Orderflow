@@ -94,6 +94,25 @@ export class OrderService {
         return updatedOrder;
     }
 
+
+    async resetRetryCount(id: string) {
+
+        const order = await this.getOrder(id);
+        if (!order) {
+            throw new NotFoundError(`Order ${id} not found`);
+        }
+
+        const updatedOrder = await prisma.order.update({
+            where: { id },
+            data: {
+                retryCount: 0
+            },
+        });
+
+        return updatedOrder;
+    }
+
+
     async getOrderEvents(orderId: string) {
 
         return prisma.orderEvent.findMany({
@@ -154,6 +173,8 @@ export class OrderService {
                 }
             }
         });
+
+        return order;
     }
 }
 

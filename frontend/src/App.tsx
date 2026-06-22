@@ -5,7 +5,7 @@ import { OrdersList } from './components/OrdersList.js';
 import { DashboardSummary } from './components/DashboardSummary.js';
 import { OrderDetails } from './components/OrderDetails.js';
 import { listOrders, getOrderEvents, retryOrder } from './api/orders.js';
-import { getQueueStats } from './api/queue.js';
+import { getQueueStats, requeueOrderFromDlq } from './api/queue.js';
 import { useState, useEffect, useMemo } from 'react';
 import styles from './assets/css/App.module.css';
 
@@ -22,6 +22,7 @@ function App() {
   const [loadOrderError, setOrderLoadError] = useState<string | null>(null);
   const [loadOrderEventsError, setOrderEventsLoadError] = useState<string | null>(null);
   const [loadQueueStatsError, setLoadQueueStatsError] = useState<string | null>(null);
+  const [requeueOrderError, setrequeueOrderError] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -156,6 +157,20 @@ function App() {
     }
   };
 
+  const requeueOrder = async (orderId: string) => {
+    try {
+      const response = await requeueOrderFromDlq(orderId);
+
+
+      if (!response.ok) {
+        throw new Error('Failed to requeue order from DLQ');
+      }
+
+    } catch (err) {
+      setrequeueOrderError(err instanceof Error ? err.message : 'Unknown error');
+    }
+  };
+
 
   return (
     <>
@@ -180,7 +195,9 @@ function App() {
           loading={eventsLoading}
           loadError={loadOrderEventsError}
           orderRetryError={orderRetryError}
+          requeueOrderError={requeueOrderError}
           onOrderRetryClicked={retryOrderProcessing}
+          onRequeueDlqClicked={requeueOrder}
         />
       </section>
     </>

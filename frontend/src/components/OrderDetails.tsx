@@ -7,7 +7,9 @@ type OrderDetailsProps = {
     loading: boolean;
     loadError: string | null;
     orderRetryError: string | null;
+    requeueOrderError: string | null;
     onOrderRetryClicked: (orderId: string) => void;
+    onRequeueDlqClicked: (orderId: string) => void;
 };
 
 export const OrderDetails = ({
@@ -16,7 +18,9 @@ export const OrderDetails = ({
     loading,
     loadError,
     orderRetryError,
-    onOrderRetryClicked
+    requeueOrderError,
+    onOrderRetryClicked,
+    onRequeueDlqClicked
 }: OrderDetailsProps) => {
 
     if (!order) {
@@ -37,6 +41,7 @@ export const OrderDetails = ({
             timeStyle: 'short',
         }).format(new Date(date));
 
+    const hasRetryLimitExceeded = orderEvents[orderEvents.length - 1].type === 'RETRY_LIMIT_EXCEEDED';
 
     const { customerId, items, retryCount, createdAt, updatedAt } = order;
     const createdDate = formatDate(createdAt);
@@ -82,14 +87,23 @@ export const OrderDetails = ({
             {order.status === 'FAILED' && (
                 <>
                     <section className={styles.orderDetailsSection}>
-                        {orderRetryError && (<div className={styles.error} > {orderRetryError}</div>)}
                         <h2>Actions</h2>
                         <div>
-                            <button
-                                className={styles.retryButton}
-                                onClick={() => onOrderRetryClicked(order.id)}>
-                                Retry
-                            </button>
+                            {orderRetryError && (<div className={styles.error} > {orderRetryError}</div>)}
+                            {requeueOrderError && (<div className={styles.error} > {requeueOrderError}</div>)}
+                            {hasRetryLimitExceeded ? (
+                                <button
+                                    className={styles.actionButton}
+                                    onClick={() => onRequeueDlqClicked(order.id)}>
+                                    Requeue from DLQ
+                                </button>
+                            ) : (
+                                <button
+                                    className={styles.actionButton}
+                                    onClick={() => onOrderRetryClicked(order.id)}>
+                                    Retry
+                                </button>
+                            )}
                         </div>
                     </section>
                 </>
