@@ -5,7 +5,7 @@ OrderFlow is a distributed commerce processing platform built to demonstrate pro
 The project focuses on reliability, observability, and operational tooling rather than storefront functionality.
 
 <p align="center">
-  <img src="./docs/images/orderflow.png" width="900" alt="Orderflow dashboard">
+  <img src="./screenshots/orderflow.png" width="900" alt="Orderflow dashboard">
 </p>
 
 ## Tech Stack
