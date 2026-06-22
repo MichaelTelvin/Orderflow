@@ -17,6 +17,10 @@
     cursor: pointer;
 }
 
+.selectedCard {
+    background-color: #403e3e;
+}
+
 .orderHeader {
     height: 30%;
     margin-bottom: 1rem;

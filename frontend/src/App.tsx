@@ -187,6 +187,7 @@ function App() {
           orders={orders}
           loading={ordersLoading}
           loadError={loadOrderError}
+          selectedOrderId={selectedOrderId}
           onOrderClicked={handleOrderSelected}
         />
         <OrderDetails

@@ -89,17 +89,6 @@ Frontend:
 http://localhost:5173
 ```
 
-## Project Structure
-
-```text
-orderflow/
-├── backend/
-├── frontend/
-├── docs/
-├── docker-compose.yml
-└── README.md
-```
-
 ## Project Goals
 
 This project is intended as a portfolio application showcasing:
