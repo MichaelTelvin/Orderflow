@@ -3,21 +3,44 @@
     flex-direction: column;
     align-items: flex-start;
     width: 60%;
-    padding: 10px;
-    gap: 5px;
+    padding: 10px 10px 10px 0px;
+    gap: 3px;
 }
 
-.orderDetailsCard {
+.orderDetailsContainer {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+
+.orderDetailsSection {
     background-color: #302f2f;
-    padding: 10px;
+    padding: 15px 20px;
     border: 1px solid #201f1f;
-    border-radius: 6px;
     width: 100%;
     text-align: left;
 }
 
-.orderDetailsCard h2 {
-    color: #9ca3af;
+.orderDetailsCard {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    border-radius: 6px;
+    width: 100%;
+    text-align: left;
+    padding-left: 1.2rem;
+}
+
+.orderDetailsSection h2 {
+    color: #b3b5b7;
+}
+
+.orderDetailsSection li {
+    margin-bottom: 1rem;
+}
+
+.orderDate {
+    font-size: 0.85rem;
 }
 
 .messagePlaceholder {

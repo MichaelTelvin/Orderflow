@@ -25,11 +25,13 @@ export const DashboardSummary = (
     const { size: dlqSize } = queueStats.dlq;
 
     return (
-        <div className={styles.summaryContainer}>
-            <div className={styles.summaryItem}>Completed: {completed}</div> |
-            <div className={styles.summaryItem}>Processing: {processing}</div> |
-            <div className={styles.summaryItem}>Failed: {failed}</div> |
+        <>
+            <div className={styles.summaryItem}></div>
+            <div className={styles.summaryItem}></div>
+            <div className={styles.summaryItem}>Completed: {completed}</div>
+            <div className={styles.summaryItem}>Processing: {processing}</div>
+            <div className={styles.summaryItem}>Failed: {failed}</div>
             <div className={styles.summaryItem}>DLQ: {dlqSize}</div>
-        </div>
+        </>
     );
 };

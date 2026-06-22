@@ -11,7 +11,7 @@ type OrderEventsTableProps = {
 export const OrderDetails = ({ order, orderEvents, loading, loadError }: OrderEventsTableProps) => {
 
     if (!order) {
-        return <div className={styles.messagePlaceholder}>Select an order</div>;
+        return <div className={styles.messagePlaceholder}>Select an order to view details</div>;
     }
 
     if (loading) {
@@ -29,46 +29,48 @@ export const OrderDetails = ({ order, orderEvents, loading, loadError }: OrderEv
         }).format(new Date(date));
 
 
-    const { customerId, items, createdAt } = order;
-    const formattedDate = formatDate(createdAt);
+    const { customerId, items, retryCount, createdAt, updatedAt } = order;
+    const createdDate = formatDate(createdAt);
+    const updatedDate = formatDate(updatedAt);
 
 
     return (
         <div className={styles.orderDetailsList}>
-            <section className={styles.orderDetailsCard}>
+            <section className={styles.orderDetailsSection}>
                 <h2>Order Details</h2>
-                <div>Customer ID: {customerId}</div>
-                <div>Items: {items.length}</div>
-                <div>Created: {formattedDate}</div>
+                <div className={styles.orderDetailsCard}>
+                    <div className={styles.orderDetailsContainer}>
+                        <div>Customer ID: </div>
+                        <div>Items: </div>
+                        <div>Retries: </div>
+                        <div>Created: </div>
+                        <div>Updated: </div>
+                    </div>
+                    <div className={styles.orderDetailsContainer}>
+                        <div>{customerId}</div>
+                        <div>{items.length}</div>
+                        <div>{retryCount}</div>
+                        <div className={styles.orderDate}>{createdDate}</div>
+                        <div className={styles.orderDate}>{updatedDate}</div>
+                    </div>
+                </div>
             </section>
-            <section className={styles.orderDetailsCard}>
+            <section className={styles.orderDetailsSection}>
                 <h2>Timeline</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Type</th>
-                            <th>Message</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {orderEvents.length === 0 ? (
-                            <tr>
-                                <td colSpan={6}>
-                                    No order events found
-                                </td>
-                            </tr>
-                        ) : orderEvents.map((event: OrderEvent) => (
-                            <tr key={event.id}>
-                                <td>
-                                    {event.type}
-                                </td>
-                                <td>{event.message}</td>
-                            </tr>
+                {orderEvents.length === 0 ? (
+                    <div>No order events found</div>
+                ) : (
+                    <ul>
+                        {orderEvents.map((event: OrderEvent) => (
+                            <li key={event.id}>
+                                <div>{event.type}</div>
+                                <div>{event.message}</div>
+                            </li>
                         ))}
-                    </tbody>
-                </table>
+                    </ul>
+                )}
             </section>
-            <section className={styles.orderDetailsCard}>
+            <section className={styles.orderDetailsSection}>
                 <h2>Actions</h2>
             </section>
         </div>

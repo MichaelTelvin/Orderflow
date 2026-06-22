@@ -12,12 +12,6 @@ export const OrdersList = (
     { orders, loading, loadError, onOrderClicked }: OrdersListProps
 ) => {
 
-    const formatDate = (date: string) =>
-        new Intl.DateTimeFormat('en-US', {
-            dateStyle: 'medium',
-            timeStyle: 'short',
-        }).format(new Date(date));
-
     if (loading) {
         return <div>Loading orders...</div>;
     }
@@ -37,16 +31,10 @@ export const OrdersList = (
                         className={styles.orderCard}
                         onClick={() => onOrderClicked(order.id)}>
                         <div className={styles.orderHeader}>
-                            <span>{order.id.slice(0, 6)}...</span>
-                            <span className={styles.statusBadge}>
-                                {order.status}
-                            </span>
+                            <span className={styles.orderLabel}>Order:</span> &nbsp;{order.id.slice(0, 8)}...
                         </div>
-                        <div className={styles.orderMeta}>
-                            Retries: {order.retryCount}
-                        </div>
-                        <div className={styles.orderMeta}>
-                            {formatDate(order.updatedAt)}
+                        <div className={`${styles.statusBadge} ${styles[order.status.toLowerCase()]}`}>
+                            {order.status}
                         </div>
                     </div>
                 ))

@@ -145,15 +145,13 @@ function App() {
 
   return (
     <>
-      <section className={styles.appSection}>
+      <section className={`${styles.appSection} ${styles.unifiedBar}`}>
+        <CreateOrderPanel
+          onOrderCreated={handleOrderCreated} />
         <DashboardSummary
           orderSummary={orderSummary}
           queueStats={queueStats}
           loadError={loadQueueStatsError} />
-      </section>
-      <section className={styles.appSection}>
-        <CreateOrderPanel
-          onOrderCreated={handleOrderCreated} />
       </section>
       <section className={`${styles.appSection} ${styles.masterDetail}`}>
         <OrdersList

@@ -9,7 +9,7 @@
 
 .orderCard {
     background-color: #302f2f;
-    padding: 10px;
+    padding: 20px;
     border: 1px solid #201f1f;
     border-radius: 6px;
     width: 100%;
@@ -18,10 +18,33 @@
 
 .orderHeader {
     height: 30%;
+    margin-bottom: 1rem;
 }
 
-.orderMeta {
-    height: 30%;
+.orderLabel {
+    color: #b3b5b7;
+    font-weight: 600;
+}
+
+.statusBadge {
+    padding: 8px;
+    border-radius: 10px;
+    width: 8rem;
+    border: 1px solid #201f1f;
+    color: rgb(151, 151, 156);
+    text-align: center;
+}
+
+.completed {
+    background-color: #0c5d05;
+}
+
+.failed {
+    background-color: #e23a3a;
+}
+
+.processing {
+    background-color: #0840da;
 }
 
 .error {
