@@ -28,7 +28,7 @@ The project focuses on reliability, observability, and operational tooling rathe
 - Docker
 - Docker Compose
 
-## Planned Features
+## Implemented Features
 
 ### Order Processing
 - Order lifecycle management
